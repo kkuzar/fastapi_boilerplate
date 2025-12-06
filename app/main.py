@@ -1,7 +1,14 @@
+import os
+from typing import List
+
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.backend.router import router as viewer_router
+
+
+load_dotenv(override=True)
 
 
 app = FastAPI(
@@ -14,10 +21,13 @@ app = FastAPI(
 
 app.include_router(viewer_router)
 
-# Todo, origins need to be done in Envs.
-origins = [
-    "http://localhost",
-]
+def _parse_origins(raw: str | None) -> List[str]:
+    if not raw:
+        return ["http://localhost", "http://127.0.0.1"]
+    return [o.strip() for o in raw.split(",") if o.strip()]
+
+
+origins = _parse_origins(os.getenv("ALLOW_ORIGINS"))
 
 app.add_middleware(
     CORSMiddleware,

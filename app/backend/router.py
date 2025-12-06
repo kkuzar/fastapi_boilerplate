@@ -1,12 +1,8 @@
 import uuid
 from http import HTTPStatus
 
-from dotenv import load_dotenv
 from fastapi import APIRouter
 from starlette.responses import JSONResponse, Response
-
-
-load_dotenv(verbose=True)
 
 router = APIRouter()
 
@@ -21,4 +17,4 @@ async def health():
 
 @router.get("/", tags=["utility"])
 async def root_page():
-    return Response(status_code=HTTPStatus.ACCEPTED, content="Curious?")
+    return Response(status_code=HTTPStatus.OK, content="Curious?")
